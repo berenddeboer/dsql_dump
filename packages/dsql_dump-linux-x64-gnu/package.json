@@ -21,9 +21,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/dsql_dump.git"
+    "url": "git+https://github.com/berenddeboer/dsql_dump.git"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "engines": {
     "node": ">=18"
   }

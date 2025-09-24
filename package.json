@@ -10,6 +10,11 @@
     "LICENSE",
     "README.md"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/berenddeboer/dsql_dump.git"
+  },
+  "license": "Apache-2.0",
   "scripts": {
     "eslint": "eslint",
     "build": "./scripts/build.sh",
