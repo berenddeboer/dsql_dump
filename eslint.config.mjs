@@ -75,6 +75,7 @@ export default [
       '@stylistic/key-spacing': ['error'],
       '@stylistic/no-multiple-empty-lines': ['error'],
       '@stylistic/no-trailing-spaces': ['error'],
+      '@stylistic/eol-last': ['error', 'always'],
 
       // General rules
       curly: ['error', 'multi-line', 'consistent'],
@@ -106,14 +107,6 @@ export default [
       ],
 
       // Import rules
-      'import/no-extraneous-dependencies': [
-        'error',
-        {
-          devDependencies: ['**/test/**', '**/build-tools/**'],
-          optionalDependencies: false,
-          peerDependencies: true,
-        },
-      ],
       'import/no-unresolved': ['error'],
       'import/order': [
         'warn',

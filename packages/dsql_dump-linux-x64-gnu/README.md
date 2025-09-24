@@ -31,3 +31,19 @@ Supported options:
 | -a, --data-only | Dump only the data, not the schema (data definitions). |
 | -c, --clean | Output commands to DROP all the dumped database objects prior to outputting the commands for creating them. |
 | --schema= | Dump a specific schema. |
+
+# Working on this code
+
+To install dependencies:
+
+```bash
+bun install
+```
+
+To run:
+
+```bash
+bun run index.ts
+```
+
+This project was created using `bun init` in bun v1.2.19. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.

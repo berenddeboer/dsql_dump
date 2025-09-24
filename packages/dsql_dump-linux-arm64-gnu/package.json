@@ -1,0 +1,24 @@
+{
+  "name": "dsql_dump-linux-arm64-gnu",
+  "version": "1.0.0",
+  "description": "dsql_dump binary for Linux arm64 (glibc)",
+  "os": ["linux"],
+  "cpu": ["arm64"],
+  "libc": ["glibc"],
+  "bin": {
+    "dsql_dump": "bin/dsql_dump"
+  },
+  "files": [
+    "bin/dsql_dump",
+    "LICENSE",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/dsql_dump.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

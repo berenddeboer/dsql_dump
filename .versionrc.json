@@ -1,0 +1,37 @@
+{
+  "types": [
+    {
+      "type": "feat",
+      "section": "Features"
+    },
+    {
+      "type": "fix",
+      "section": "Bug Fixes"
+    },
+    {
+      "type": "chore",
+      "hidden": true
+    },
+    {
+      "type": "docs",
+      "section": "Documentation"
+    },
+    {
+      "type": "refactor",
+      "section": "Code Refactoring"
+    },
+    {
+      "type": "perf",
+      "section": "Performance Improvements"
+    }
+  ],
+  "bumpFiles": [
+    "package.json",
+    "packages/dsql_dump-linux-x64-gnu/package.json",
+    "packages/dsql_dump-linux-arm64-gnu/package.json"
+  ],
+  "scripts": {
+    "prerelease": "npm run build",
+    "postbump": "node -e \"const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')); pkg.optionalDependencies['dsql_dump-linux-x64-gnu'] = pkg.version; pkg.optionalDependencies['dsql_dump-linux-arm64-gnu'] = pkg.version; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\\n');\""
+  }
+}

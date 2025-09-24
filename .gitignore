@@ -6,6 +6,10 @@ out
 dist
 *.tgz
 
+# platform package binaries
+packages/*/bin/dsql_dump
+packages/*/*.tgz
+
 # code coverage
 coverage
 *.lcov
