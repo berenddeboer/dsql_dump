@@ -3,19 +3,22 @@
   "workspaces": {
     "": {
       "name": "dsql_dump",
-      "dependencies": {
+      "devDependencies": {
         "@aws-sdk/dsql-signer": "^3.896.0",
+        "@stylistic/eslint-plugin": "^5.4.0",
+        "@types/bun": "latest",
         "@typescript-eslint/eslint-plugin": "^8.44.1",
         "@typescript-eslint/parser": "^8.44.1",
         "commit-and-tag-version": "^12.6.0",
         "eslint": "^9.36.0",
         "eslint-import-resolver-typescript": "^4.4.4",
         "eslint-plugin-import": "^2.32.0",
+        "husky": "^9.1.7",
         "postgres": "^3.4.7",
       },
-      "devDependencies": {
-        "@stylistic/eslint-plugin": "^5.4.0",
-        "@types/bun": "latest",
+      "optionalDependencies": {
+        "dsql_dump-linux-arm64-gnu": "1.2.5",
+        "dsql_dump-linux-x64-gnu": "1.2.5",
       },
       "peerDependencies": {
         "typescript": "^5",
@@ -467,6 +470,10 @@
 
     "dotgitignore": ["dotgitignore@2.1.0", "", { "dependencies": { "find-up": "^3.0.0", "minimatch": "^3.0.4" } }, "sha512-sCm11ak2oY6DglEPpCB8TixLjWAxd3kJTs6UIcSasNYxXdFPV+YKlye92c8H4kKFqV5qYMIh7d+cYecEg0dIkA=="],
 
+    "dsql_dump-linux-arm64-gnu": ["dsql_dump-linux-arm64-gnu@1.2.5", "", { "os": "linux", "cpu": "arm64", "bin": { "dsql_dump": "bin/dsql_dump" } }, "sha512-8nA8Nk/YoW8sF8VEdoVTdI/NMwmlev1OxlciBTGv9bzHhDespavSP+FgvoB9aLk8VTyLUoS7GsBnqmk8dQ9Eiw=="],
+
+    "dsql_dump-linux-x64-gnu": ["dsql_dump-linux-x64-gnu@1.2.5", "", { "os": "linux", "cpu": "x64", "bin": { "dsql_dump": "bin/dsql_dump" } }, "sha512-rHQzZYlKbcVN1wZWVGwC8uhHxOxbhLa0ZlH60rJYBPFlpV6DHNNJ6CVfNQUih7/7ea4Wb3U94nPFr6mgWVmAzQ=="],
+
     "dunder-proto": ["dunder-proto@1.0.1", "", { "dependencies": { "call-bind-apply-helpers": "^1.0.1", "es-errors": "^1.3.0", "gopd": "^1.2.0" } }, "sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A=="],
 
     "emoji-regex": ["emoji-regex@8.0.0", "", {}, "sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A=="],
@@ -612,6 +619,8 @@
     "http-proxy-agent": ["http-proxy-agent@7.0.2", "", { "dependencies": { "agent-base": "^7.1.0", "debug": "^4.3.4" } }, "sha512-T1gkAiYYDWYx3V5Bmyu7HcfcvL7mUrTWiM6yOfa3PIphViJ/gFPbvidQ+veqSOHci/PxBcDabeUNCzpOODJZig=="],
 
     "https-proxy-agent": ["https-proxy-agent@7.0.6", "", { "dependencies": { "agent-base": "^7.1.2", "debug": "4" } }, "sha512-vK9P5/iUfdl95AI+JVyUuIcVtd4ofvtrOr3HNtM2yxC9bnMbEdp3x01OhQNnjb8IJYi38VlTE3mBXwcfvywuSw=="],
+
+    "husky": ["husky@9.1.7", "", { "bin": { "husky": "bin.js" } }, "sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA=="],
 
     "iconv-lite": ["iconv-lite@0.6.3", "", { "dependencies": { "safer-buffer": ">= 2.1.2 < 3.0.0" } }, "sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw=="],
 

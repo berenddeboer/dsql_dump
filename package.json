@@ -16,6 +16,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
+    "prepare": "husky",
     "eslint": "eslint",
     "build": "./scripts/build.sh",
     "build:linux-x64": "bun build src/index.ts --compile --target=bun-linux-x64 --outfile packages/dsql_dump-linux-x64-gnu/bin/dsql_dump",
@@ -37,6 +38,7 @@
     "eslint": "^9.36.0",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
+    "husky": "^9.1.7",
     "postgres": "^3.4.7"
   },
   "peerDependencies": {
