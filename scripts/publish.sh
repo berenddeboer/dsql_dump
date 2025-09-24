@@ -7,6 +7,16 @@ echo "Publishing dsql_dump packages..."
 VERSION=$(node -p "require('./package.json').version")
 echo "Publishing version: $VERSION"
 
+# Detect if running in CI
+if [ "${CI:-}" = "true" ]; then
+    echo "Running in CI environment"
+    # In CI, we may want to add --provenance flag explicitly
+    PUBLISH_FLAGS="--provenance"
+else
+    echo "Running locally"
+    PUBLISH_FLAGS=""
+fi
+
 # Check that binaries exist
 if [ ! -f packages/dsql_dump-linux-x64-gnu/bin/dsql_dump ]; then
     echo "Error: linux-x64-gnu binary not found. Run 'npm run release' first to build binaries."
@@ -20,12 +30,20 @@ fi
 
 # Publish platform packages first
 echo "Publishing platform packages..."
-cd packages/dsql_dump-linux-x64-gnu && npm publish && cd ../..
-cd packages/dsql_dump-linux-arm64-gnu && npm publish && cd ../..
+cd packages/dsql_dump-linux-x64-gnu
+echo "Publishing dsql_dump-linux-x64-gnu@$VERSION"
+npm publish $PUBLISH_FLAGS
+cd ../..
+
+cd packages/dsql_dump-linux-arm64-gnu
+echo "Publishing dsql_dump-linux-arm64-gnu@$VERSION"
+npm publish $PUBLISH_FLAGS
+cd ../..
 
 # Publish meta package
 echo "Publishing meta package..."
-npm publish
+echo "Publishing dsql_dump@$VERSION"
+npm publish $PUBLISH_FLAGS
 
 echo "All packages published successfully!"
 echo "Users can now install with: npm install dsql_dump"
