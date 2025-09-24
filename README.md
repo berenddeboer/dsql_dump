@@ -28,6 +28,11 @@ dsql_dump > dump.sql
 
 Supported options:
 
-| -a, --data-only | Dump only the data, not the schema (data definitions). |
-| -c, --clean | Output commands to DROP all the dumped database objects prior to outputting the commands for creating them. |
-| --schema= | Dump a specific schema. |
+| Option                    | Description                                                                                                 |
+|---------------------------|-------------------------------------------------------------------------------------------------------------|
+| -h, --host <host>         | DSQL cluster hostname (default: PGHOST or localhost)                                                       |
+| -n, --schema <schema>     | Dump the named schema only (default: public)                                                               |
+| -a, --data-only           | Dump only the data, not the schema (data definitions)                                                      |
+| -c, --clean               | Output commands to DROP all the dumped database objects prior to outputting the commands for creating them |
+| --help                    | Display help for command                                                                                    |
+| --version                 | Display version number                                                                                      |

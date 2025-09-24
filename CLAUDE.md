@@ -67,6 +67,9 @@ Cross-platform binary compilation using Bun:
 - Build script (`scripts/build.sh`) cleans existing binaries and builds both platforms
 - Binaries are ~100MB and include the entire runtime
 
+## Commits
+- use conventional commit messages
+
 ## Publishing Process
 
 The `scripts/publish.sh` workflow:
