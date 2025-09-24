@@ -1,10 +1,16 @@
 {
   "name": "dsql_dump-linux-arm64-gnu",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "dsql_dump binary for Linux arm64 (glibc)",
-  "os": ["linux"],
-  "cpu": ["arm64"],
-  "libc": ["glibc"],
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "libc": [
+    "glibc"
+  ],
   "bin": {
     "dsql_dump": "bin/dsql_dump"
   },
