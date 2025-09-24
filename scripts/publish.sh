@@ -10,11 +10,12 @@ echo "Publishing version: $VERSION"
 # Detect if running in CI
 if [ "${CI:-}" = "true" ]; then
     echo "Running in CI environment"
-    # In CI, we may want to add --provenance flag explicitly
-    PUBLISH_FLAGS="--provenance"
+    # In CI, we want provenance and ensure packages are public
+    PUBLISH_FLAGS="--provenance --access public"
 else
     echo "Running locally"
-    PUBLISH_FLAGS=""
+    # Locally, just ensure packages are public (needed for first-time publishing)
+    PUBLISH_FLAGS="--access public"
 fi
 
 # Check that binaries exist
