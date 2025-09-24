@@ -1,12 +1,28 @@
 {
   "name": "dsql_dump",
-  "module": "index.ts",
+  "description": "Meta package that depends on a platform-specific dsql_dump binary",
+  "module": "src/index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "eslint": "eslint",
+    "compile": "bun build src/index.ts --compile --outfile dist/dsql_dump"
+  },
   "devDependencies": {
+    "@stylistic/eslint-plugin": "^5.4.0",
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "@aws-sdk/dsql-signer": "^3.896.0",
+    "@typescript-eslint/eslint-plugin": "^8.44.1",
+    "@typescript-eslint/parser": "^8.44.1",
+    "commit-and-tag-version": "^12.6.0",
+    "eslint": "^9.36.0",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "postgres": "^3.4.7"
   }
 }
