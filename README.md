@@ -2,7 +2,7 @@
 
 `dsql_dump` is a utility to dump your DSQL database as SQL, much like
 what `pg_dump` does. It allows you to take a DSQL database, and
-restore it to local postgres database for example.
+restore it to a local PostgreSQL database for example.
 
 If you find this utility useful, please [star it on github](https://github.com/berenddeboer/dsql_dump).
 
@@ -43,5 +43,11 @@ Supported options:
 
 # Status
 
-This package is in its works for me
+This package is in its "works for me"
 days. [Contributions](./CONTRIBUTION.md) greatly appreciated!
+
+Supported:
+- [X] CREATE TABLE
+- [X] CREATE INDEX
+- [ ] CREATE VIEW
+- [ ] CREATE FUNCTION
