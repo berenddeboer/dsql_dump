@@ -3,6 +3,8 @@
 `dsql_dump` is a utility to dump a DSQL schema as SQL, much like what
 `pg_dump` does.
 
+If you find this utility useful, please [star it on github](https://github.com/berenddeboer/dsql_dump).
+
 # Installation
 
 ```sh
@@ -36,3 +38,8 @@ Supported options:
 | -c, --clean               | Output commands to DROP all the dumped database objects prior to outputting the commands for creating them |
 | --help                    | Display help for command                                                                                    |
 | --version                 | Display version number                                                                                      |
+
+# Status
+
+This package is in its works for me
+days. [Contributions](./CONTRIBUTION.md) greatly appreciated!
