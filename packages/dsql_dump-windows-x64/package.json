@@ -1,5 +1,5 @@
 {
-  "name": "dsql_dump-win32-x64",
+  "name": "dsql_dump-windows-x64",
   "version": "1.2.5",
   "description": "dsql_dump binary for Windows x64",
   "os": [

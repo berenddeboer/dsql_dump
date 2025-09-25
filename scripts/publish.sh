@@ -39,15 +39,11 @@ if [ ! -f packages/dsql_dump-darwin-x64/bin/dsql_dump ]; then
     exit 1
 fi
 
-if [ ! -f packages/dsql_dump-win32-x64/bin/dsql_dump.exe ]; then
-    echo "Error: win32-x64 binary not found. Run 'npm run release' first to build binaries."
+if [ ! -f packages/dsql_dump-windows-x64/bin/dsql_dump.exe ]; then
+    echo "Error: windows-x64 binary not found. Run 'npm run release' first to build binaries."
     exit 1
 fi
 
-if [ ! -f packages/dsql_dump-win32-arm64/bin/dsql_dump.exe ]; then
-    echo "Error: win32-arm64 binary not found. Run 'npm run release' first to build binaries."
-    exit 1
-fi
 
 # Publish platform packages first
 echo "Publishing platform packages..."
@@ -71,15 +67,11 @@ echo "Publishing dsql_dump-darwin-x64@$VERSION"
 npm publish $PUBLISH_FLAGS
 cd ../..
 
-cd packages/dsql_dump-win32-x64
-echo "Publishing dsql_dump-win32-x64@$VERSION"
+cd packages/dsql_dump-windows-x64
+echo "Publishing dsql_dump-windows-x64@$VERSION"
 npm publish $PUBLISH_FLAGS
 cd ../..
 
-cd packages/dsql_dump-win32-arm64
-echo "Publishing dsql_dump-win32-arm64@$VERSION"
-npm publish $PUBLISH_FLAGS
-cd ../..
 
 # Publish meta package
 echo "Publishing meta package..."

@@ -8,6 +8,7 @@ dist
 
 # platform package binaries
 packages/*/bin/dsql_dump
+packages/*/bin/dsql_dump.exe
 packages/*/*.tgz
 
 # code coverage

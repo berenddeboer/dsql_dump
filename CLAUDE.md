@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This project uses a sophisticated distribution pattern:
 
 - **Root meta package**: Contains `optionalDependencies` for platform packages, users install this
-- **Platform packages**: `packages/dsql_dump-linux-{x64,arm64}-gnu/` contain actual binaries
+- **Platform packages**: `packages/dsql_dump-{linux-{x64,arm64}-gnu,darwin-{arm64,x64},windows-x64}/` contain actual binaries
 - **Automatic selection**: npm installs only the compatible platform package based on `os`/`cpu`/`libc` fields
 - **Cross-compilation**: Uses Bun's `--compile` with `--target` flags for platform-specific binaries
 
@@ -20,8 +20,11 @@ This project uses a sophisticated distribution pattern:
 - `bun install` - Install dependencies
 - `bun run index.ts` - Run during development
 - `npm run build` - Build all platform binaries (calls `scripts/build.sh`)
-- `npm run build:linux-x64` - Build only x64 binary
-- `npm run build:linux-arm64` - Build only ARM64 binary
+- `npm run build:linux-x64` - Build Linux x64 binary
+- `npm run build:linux-arm64` - Build Linux ARM64 binary
+- `npm run build:darwin-arm64` - Build macOS ARM64 binary
+- `npm run build:darwin-x64` - Build macOS x64 binary
+- `npm run build:windows-x64` - Build Windows x64 binary
 - `npm run eslint` - Lint TypeScript code
 - `bun run eslint --fix src/**/*.ts` - Lint and auto-fix TypeScript code in src directory
 - `npm run release` - Version bump, changelog, git tag, and build (uses commit-and-tag-version)
@@ -68,8 +71,12 @@ The project uses `commit-and-tag-version` for automated releases:
 Cross-platform binary compilation using Bun:
 - `bun build src/index.ts --compile --target=bun-linux-x64 --outfile packages/dsql_dump-linux-x64-gnu/bin/dsql_dump`
 - `bun build src/index.ts --compile --target=bun-linux-arm64 --outfile packages/dsql_dump-linux-arm64-gnu/bin/dsql_dump`
-- Build script (`scripts/build.sh`) cleans existing binaries and builds both platforms
+- `bun build src/index.ts --compile --target=bun-darwin-arm64 --outfile packages/dsql_dump-darwin-arm64/bin/dsql_dump`
+- `bun build src/index.ts --compile --target=bun-darwin-x64 --outfile packages/dsql_dump-darwin-x64/bin/dsql_dump`
+- `bun build src/index.ts --compile --target=bun-windows-x64 --outfile packages/dsql_dump-windows-x64/bin/dsql_dump.exe`
+- Build script (`scripts/build.sh`) cleans existing binaries and builds all supported platforms
 - Binaries are ~100MB and include the entire runtime
+- **Note**: Windows ARM64 is not yet supported by Bun's cross-compilation
 
 ## Commits
 - use conventional commit messages
@@ -77,7 +84,15 @@ Cross-platform binary compilation using Bun:
 ## Publishing Process
 
 The `scripts/publish.sh` workflow:
-1. Validates binaries exist for both platforms
-2. Publishes platform packages first (`packages/dsql_dump-linux-{x64,arm64}-gnu/`)
+1. Validates binaries exist for all platforms
+2. Publishes platform packages first (`packages/dsql_dump-linux-{x64,arm64}-gnu/`, `packages/dsql_dump-darwin-{arm64,x64}/`, `packages/dsql_dump-windows-x64/`)
 3. Publishes meta package last (contains only `optionalDependencies`)
 4. Version synchronization is handled by `commit-and-tag-version` via `.versionrc.json`
+
+**Supported Platforms:**
+- Linux x64 (glibc)
+- Linux ARM64 (glibc)
+- macOS ARM64 (Apple Silicon)
+- macOS x64 (Intel)
+- Windows x64
+- Windows ARM64 (not yet supported - Bun limitation)

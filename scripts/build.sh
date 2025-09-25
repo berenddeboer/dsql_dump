@@ -23,13 +23,9 @@ npm run build:darwin-arm64
 echo "Building for darwin-x64..."
 npm run build:darwin-x64
 
-# Build for win32-x64
-echo "Building for win32-x64..."
-npm run build:win32-x64
-
-# Build for win32-arm64
-echo "Building for win32-arm64..."
-npm run build:win32-arm64
+# Build for windows-x64
+echo "Building for windows-x64..."
+npm run build:windows-x64
 
 echo "Build completed successfully!"
 echo "Binaries created:"
