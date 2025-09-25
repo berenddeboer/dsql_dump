@@ -5,6 +5,8 @@ export interface DumpOptions {
 }
 
 export class OutputFormatter {
+  constructor(private version: string) {}
+
   formatHeader(options: DumpOptions): string {
     const lines: string[] = []
 
@@ -12,19 +14,11 @@ export class OutputFormatter {
     lines.push("-- DSQL database dump")
     lines.push("--")
     lines.push("")
-    lines.push("-- Dumped by dsql_dump version 0.0.0")
+    lines.push(`-- Dumped by dsql_dump version ${this.version}`)
     lines.push(`-- Dumped on ${new Date().toISOString()}`)
     lines.push("")
-    lines.push("SET statement_timeout = 0;")
-    lines.push("SET lock_timeout = 0;")
-    lines.push("SET idle_in_transaction_session_timeout = 0;")
     lines.push("SET client_encoding = 'UTF8';")
-    lines.push("SET standard_conforming_strings = on;")
     lines.push("SELECT pg_catalog.set_config('search_path', '', false);")
-    lines.push("SET check_function_bodies = false;")
-    lines.push("SET xmloption = content;")
-    lines.push("SET client_min_messages = warning;")
-    lines.push("SET row_security = off;")
     lines.push("")
 
     // Set search path if not using public schema

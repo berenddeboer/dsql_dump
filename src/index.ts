@@ -87,7 +87,7 @@ async function main() {
   const sql = await createConnection(config)
 
   try {
-    const formatter = new OutputFormatter()
+    const formatter = new OutputFormatter(getVersion())
     const dumpOptions = {
       schema: options.schema || "public",
       clean: options.clean || false,
