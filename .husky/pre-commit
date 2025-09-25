@@ -1,1 +1,2 @@
-npm run eslint src/
+npm run lint src/
+npm run typecheck

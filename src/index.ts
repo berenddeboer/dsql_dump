@@ -19,7 +19,6 @@ function getVersion(): string {
 }
 
 import { parseArgs } from 'node:util';
-// @ts-expect-error - package.json import for dev fallback
 import packageJson from '../package.json' with { type: 'json' };
 import { createConnection, type DatabaseConfig } from './db';
 import { OutputFormatter } from './formatter';

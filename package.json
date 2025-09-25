@@ -17,7 +17,8 @@
   "license": "Apache-2.0",
   "scripts": {
     "prepare": "husky",
-    "eslint": "eslint",
+    "lint": "eslint",
+    "typecheck": "bunx tsc --noEmit",
     "build": "./scripts/build.sh",
     "build:linux-x64": "bun build src/index.ts --compile --target=bun-linux-x64 --outfile packages/dsql_dump-linux-x64-gnu/bin/dsql_dump",
     "build:linux-arm64": "bun build src/index.ts --compile --target=bun-linux-arm64 --outfile packages/dsql_dump-linux-arm64-gnu/bin/dsql_dump",

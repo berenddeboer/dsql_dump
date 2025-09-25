@@ -25,8 +25,8 @@ This project uses a sophisticated distribution pattern:
 - `npm run build:darwin-arm64` - Build macOS ARM64 binary
 - `npm run build:darwin-x64` - Build macOS x64 binary
 - `npm run build:windows-x64` - Build Windows x64 binary
-- `npm run eslint` - Lint TypeScript code
-- `bun run eslint --fix src/**/*.ts` - Lint and auto-fix TypeScript code in src directory
+- `npm run lint` - Lint TypeScript code
+- `bun run lint --fix src/**/*.ts` - Lint and auto-fix TypeScript code in src directory
 - `npm run release` - Version bump, changelog, git tag, and build (uses commit-and-tag-version)
 - `npm run publish-all` - Publish all packages to npm (calls `scripts/publish.sh`)
 
