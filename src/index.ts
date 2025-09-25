@@ -38,6 +38,7 @@ Options:
   -h, --host <host>                DSQL cluster hostname (default: PGHOST or localhost)
   -n, --schema <schema>            dump the named schema only (default: public)
   -a, --data-only                  dump only the data, not the schema
+  -s, --schema-only                dump only the schema, not the data
   -c, --clean                      output commands to DROP objects before creating them
       --help                       display help for command
       --version                    display version number
@@ -57,6 +58,7 @@ async function main() {
       "host": { type: "string", short: "h" },
       "schema": { type: "string", short: "n" },
       "data-only": { type: "boolean", short: "a" },
+      "schema-only": { type: "boolean", short: "s" },
       "clean": { type: "boolean", short: "c" },
     },
     allowPositionals: false,
@@ -72,6 +74,11 @@ async function main() {
     process.exit(0)
   }
 
+  // Validate mutually exclusive options
+  if (options["data-only"] && options["schema-only"]) {
+    console.error("Error: --data-only and --schema-only are mutually exclusive")
+    process.exit(1)
+  }
 
   const config: DatabaseConfig = {
     host: options.host,
@@ -85,6 +92,7 @@ async function main() {
       schema: options.schema || "public",
       clean: options.clean || false,
       dataOnly: options["data-only"] || false,
+      schemaOnly: options["schema-only"] || false,
     }
 
     // Output header
@@ -96,7 +104,8 @@ async function main() {
     // Extract tables (needed for both schema and data-only dumps)
     const tables = await tableExtractor.extractTables(dumpOptions.schema)
 
-    if (!dumpOptions.dataOnly) {
+    if (!dumpOptions.dataOnly && !dumpOptions.schemaOnly) {
+      // Normal dump: schema + data
       const indexExtractor = new IndexExtractor(sql)
       const constraintExtractor = new ConstraintExtractor(sql)
 
@@ -142,12 +151,51 @@ async function main() {
           }
         }
       }
-    } else {
+    } else if (dumpOptions.dataOnly) {
       // Data-only dump
       if (tables.length > 0) {
         console.log(formatter.formatSectionComment("Data"))
         for (const table of tables) {
           console.log(await dataExtractor.dumpTableData(table))
+        }
+      }
+    } else if (dumpOptions.schemaOnly) {
+      // Schema-only dump
+      const indexExtractor = new IndexExtractor(sql)
+      const constraintExtractor = new ConstraintExtractor(sql)
+
+      // Extract remaining schema objects
+      const [indexes, constraints] = await Promise.all([
+        indexExtractor.extractIndexes(dumpOptions.schema),
+        constraintExtractor.extractConstraints(dumpOptions.schema),
+      ])
+
+      // Output tables
+      if (tables.length > 0) {
+        console.log(formatter.formatSectionComment("Tables"))
+        for (const table of tables) {
+          console.log(tableExtractor.formatCreateTable(table, constraints, dumpOptions.clean))
+        }
+      }
+
+      // Output constraints that need to be added after tables
+      const postTableConstraints = constraintExtractor.getPostTableConstraints(constraints)
+      if (postTableConstraints.length > 0) {
+        console.log(formatter.formatSectionComment("Constraints"))
+        for (const constraint of postTableConstraints) {
+          console.log(constraintExtractor.formatConstraint(constraint, dumpOptions.clean))
+        }
+      }
+
+      // Output indexes (excluding those that back constraints)
+      const standaloneIndexes = indexes.filter(idx => !idx.isConstraintIndex)
+      if (standaloneIndexes.length > 0) {
+        console.log(formatter.formatSectionComment("Indexes"))
+        for (const index of standaloneIndexes) {
+          const indexDdl = indexExtractor.formatCreateIndex(index, dumpOptions.clean)
+          if (indexDdl.trim()) {
+            console.log(indexDdl)
+          }
         }
       }
     }
