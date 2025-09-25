@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.6.2](https://github.com/berenddeboer/dsql_dump/compare/v1.6.1...v1.6.2) (2025-09-25)
+
+
+### Bug Fixes
+
+* emit stand-alone indexes without using clause ([#5](https://github.com/berenddeboer/dsql_dump/issues/5)) ([659b0d8](https://github.com/berenddeboer/dsql_dump/commit/659b0d8fa2cca5437e243b41e0ac4b76c2fd7ff9))
+
 ## [1.6.1](https://github.com/berenddeboer/dsql_dump/compare/v1.6.0...v1.6.1) (2025-09-25)
 
 
