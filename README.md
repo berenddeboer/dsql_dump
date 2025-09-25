@@ -1,6 +1,6 @@
 # About
 
-`dsql_dump` is a utility to dump a DSQL schema as SQL, much like what
+`dsql_dump` is a utility to dump your DSQL database to SQL, much like what
 `pg_dump` does.
 
 If you find this utility useful, please [star it on github](https://github.com/berenddeboer/dsql_dump).
@@ -35,6 +35,7 @@ Supported options:
 | -h, --host <host>         | DSQL cluster hostname (default: PGHOST or localhost)                                                       |
 | -n, --schema <schema>     | Dump the named schema only (default: public)                                                               |
 | -a, --data-only           | Dump only the data, not the schema (data definitions)                                                      |
+| -s, --schema-only         | Dump only the schema (data definitions), not the data                                                       |
 | -c, --clean               | Output commands to DROP all the dumped database objects prior to outputting the commands for creating them |
 | --help                    | Display help for command                                                                                    |
 | --version                 | Display version number                                                                                      |
