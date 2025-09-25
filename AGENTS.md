@@ -31,6 +31,14 @@ This project uses a sophisticated distribution pattern:
 - `npm run release` - Version bump, changelog, git tag, and build (uses commit-and-tag-version)
 - `npm run publish-all` - Publish all packages to npm (calls `scripts/publish.sh`)
 
+## Testing
+
+When developing code, these utilities can be useful:
+
+- Use the `bin/dsql-psql` utility to interact with a known DSQL cluster.
+- This supports things like: `./bin/dsql-psql -c 'select 1'`
+- Dumping the default cluster creates a lot of data, using the `--schema-only` option is better to simply look at the DDL: `bun run src/index.ts --schema-only`
+
 ## Release Workflow
 
 The project uses `commit-and-tag-version` for automated releases:
@@ -64,8 +72,6 @@ The project uses `commit-and-tag-version` for automated releases:
 - Connects via `postgres` driver with DSQL-specific authentication
 - Fixed values: `database=postgres`, `username=admin`, `port=5432`
 - Schema introspection extracts tables, constraints, indexes as standard SQL DDL
-- Use the `bin/dsql-psql` utility to interact with a known DSQL cluster.
-- This supports things like: `./bin/dsql-psql -c 'select 1'`
 
 ## Build System
 

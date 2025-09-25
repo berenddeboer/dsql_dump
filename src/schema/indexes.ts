@@ -72,8 +72,9 @@ export class IndexExtractor {
       lines.push("")
     }
 
-    // Use the definition returned by pg_get_indexdef
-    lines.push(`${index.definition};`)
+    // Use the definition returned by pg_get_indexdef, but remove DSQL-specific USING clause
+    const cleanDefinition = index.definition.replace(/ USING btree_index /, " ")
+    lines.push(`${cleanDefinition};`)
     lines.push("")
 
     return lines.join("\n")
