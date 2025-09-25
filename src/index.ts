@@ -1,6 +1,26 @@
 #!/usr/bin/env bun
 
+// Build-time constant injected during compilation
+declare const BUILD_VERSION: string;
+
+// Function to get version (fallback to package.json in dev mode)
+function getVersion(): string {
+  try {
+    // In compiled binaries, BUILD_VERSION will be defined
+    return BUILD_VERSION;
+  } catch {
+    // In development, read from package.json and add -dev suffix
+    try {
+      return `${packageJson.version}-dev`;
+    } catch {
+      return '0.0.0-dev';
+    }
+  }
+}
+
 import { parseArgs } from 'node:util';
+// @ts-expect-error - package.json import for dev fallback
+import packageJson from '../package.json' with { type: 'json' };
 import { createConnection, type DatabaseConfig } from './db';
 import { OutputFormatter } from './formatter';
 import { ConstraintExtractor } from './schema/constraints';
@@ -49,7 +69,7 @@ async function main() {
   }
 
   if (options.version) {
-    console.log('0.0.0');
+    console.log(getVersion());
     process.exit(0);
   }
 
