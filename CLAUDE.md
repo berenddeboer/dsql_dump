@@ -19,14 +19,15 @@ This project uses a sophisticated distribution pattern:
 
 - `bun install` - Install dependencies
 - `bun run index.ts` - Run during development
-- `npm run build` - Build all platform binaries (calls `scripts/build.sh`)
+- `bun run build` - Build all platform binaries (calls `scripts/build.sh`)
 - `npm run build:linux-x64` - Build Linux x64 binary
 - `npm run build:linux-arm64` - Build Linux ARM64 binary
 - `npm run build:darwin-arm64` - Build macOS ARM64 binary
 - `npm run build:darwin-x64` - Build macOS x64 binary
 - `npm run build:windows-x64` - Build Windows x64 binary
-- `npm run lint` - Lint TypeScript code
+- `bun run lint` - Lint TypeScript code
 - `bun run lint --fix src/**/*.ts` - Lint and auto-fix TypeScript code in src directory
+- `bun run typecheck` - Typecheck TypeScript code
 - `npm run release` - Version bump, changelog, git tag, and build (uses commit-and-tag-version)
 - `npm run publish-all` - Publish all packages to npm (calls `scripts/publish.sh`)
 
