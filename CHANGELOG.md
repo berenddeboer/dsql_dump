@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.3.0](https://github.com/berenddeboer/dsql_dump/compare/v1.2.5...v1.3.0) (2025-09-25)
+
+
+### Features
+
+* add cross-platform binary releases for macOS and Windows ([8499cb4](https://github.com/berenddeboer/dsql_dump/commit/8499cb459139ab58c998bef2193d4368ebeb461f))
+* implement emitting data ([42d08ad](https://github.com/berenddeboer/dsql_dump/commit/42d08ad2b89c9ea2f672a03b7d5520fcbaeb2bf1))
+
+
+### Documentation
+
+* fix README options table formatting and add missing CLI options ([1f12c4c](https://github.com/berenddeboer/dsql_dump/commit/1f12c4cbfa3bb9aaee691c79a4aac4f355632af3))
+* inform user about status ([9ca8e66](https://github.com/berenddeboer/dsql_dump/commit/9ca8e6691d4fecc6f300723b60920865add9ba4c))
+* update platform package READMEs and add test file ([db33df6](https://github.com/berenddeboer/dsql_dump/commit/db33df6c4bc063b7b77edbb490cd55634c53cf1c))
+
 ## [1.2.5](https://github.com/berenddeboer/dsql_dump/compare/v1.2.4...v1.2.5) (2025-09-24)
 
 ## [1.2.4](https://github.com/berenddeboer/dsql_dump/compare/v1.2.3...v1.2.4) (2025-09-24)
