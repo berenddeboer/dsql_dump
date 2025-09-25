@@ -46,7 +46,7 @@ export default [
     rules: {
       // Stylistic rules
       '@stylistic/indent': ['error', 2],
-      '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
+      '@stylistic/quotes': ['error', 'double', { avoidEscape: true }],
       '@stylistic/comma-dangle': ['error', 'always-multiline'],
       '@stylistic/comma-spacing': ['error', { before: false, after: true }],
       '@stylistic/no-multi-spaces': ['error', { ignoreEOLComments: false }],
@@ -59,7 +59,7 @@ export default [
       '@stylistic/brace-style': ['error', '1tbs', { allowSingleLine: true }],
       '@stylistic/space-before-blocks': ['error'],
       '@stylistic/member-delimiter-style': ['error'],
-      '@stylistic/semi': ['error', 'always'],
+      '@stylistic/semi': ['error', 'never'],
       '@stylistic/max-len': [
         'error',
         {

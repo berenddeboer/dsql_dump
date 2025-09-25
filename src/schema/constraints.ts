@@ -1,11 +1,11 @@
-import type { Sql } from '../db';
+import type { Sql } from "../db"
 
 export interface Constraint {
   name: string;
   schema: string;
   tableName: string;
   owner: string;
-  type: 'p' | 'u' | 'f' | 'c' | 'x'; // primary, unique, foreign, check, exclusion
+  type: "p" | "u" | "f" | "c" | "x"; // primary, unique, foreign, check, exclusion
   definition: string;
 }
 
@@ -38,20 +38,20 @@ export class ConstraintExtractor {
         END,
         t.relname,
         c.conname
-    `;
+    `
 
     return rows.map(row => ({
       name: row.constraint_name as string,
       schema: row.schema_name as string,
       tableName: row.table_name as string,
       owner: row.owner as string,
-      type: row.constraint_type as 'p' | 'u' | 'f' | 'c' | 'x',
+      type: row.constraint_type as "p" | "u" | "f" | "c" | "x",
       definition: row.definition as string,
-    }));
+    }))
   }
 
   formatConstraint(constraint: Constraint, clean: boolean = false): string {
-    const lines: string[] = [];
+    const lines: string[] = []
 
     // const constraintTypeNames = {
     //   'p': 'PRIMARY KEY',
@@ -64,23 +64,23 @@ export class ConstraintExtractor {
     // const typeName = constraintTypeNames[constraint.type] || 'CONSTRAINT';
 
     // Add pg_dump style comment
-    lines.push('--');
-    lines.push(`-- Name: ${constraint.name}; Type: CONSTRAINT; Schema: ${constraint.schema}; Owner: ${constraint.owner}; Table: ${constraint.tableName}`);
-    lines.push('--');
-    lines.push('');
+    lines.push("--")
+    lines.push(`-- Name: ${constraint.name}; Type: CONSTRAINT; Schema: ${constraint.schema}; Owner: ${constraint.owner}; Table: ${constraint.tableName}`)
+    lines.push("--")
+    lines.push("")
 
     // Add DROP statement if clean option is enabled
     if (clean) {
-      lines.push(`ALTER TABLE IF EXISTS ${this.quoteIdentifier(constraint.schema)}.${this.quoteIdentifier(constraint.tableName)} DROP CONSTRAINT IF EXISTS ${this.quoteIdentifier(constraint.name)};`);
-      lines.push('');
+      lines.push(`ALTER TABLE IF EXISTS ${this.quoteIdentifier(constraint.schema)}.${this.quoteIdentifier(constraint.tableName)} DROP CONSTRAINT IF EXISTS ${this.quoteIdentifier(constraint.name)};`)
+      lines.push("")
     }
 
     // Add the constraint
-    lines.push(`ALTER TABLE ONLY ${this.quoteIdentifier(constraint.schema)}.${this.quoteIdentifier(constraint.tableName)}`);
-    lines.push(`    ADD CONSTRAINT ${this.quoteIdentifier(constraint.name)} ${constraint.definition};`);
-    lines.push('');
+    lines.push(`ALTER TABLE ONLY ${this.quoteIdentifier(constraint.schema)}.${this.quoteIdentifier(constraint.tableName)}`)
+    lines.push(`    ADD CONSTRAINT ${this.quoteIdentifier(constraint.name)} ${constraint.definition};`)
+    lines.push("")
 
-    return lines.join('\n');
+    return lines.join("\n")
   }
 
   /**
@@ -90,9 +90,9 @@ export class ConstraintExtractor {
   getInlineConstraints(constraints: Constraint[], tableName: string): Constraint[] {
     return constraints.filter(c =>
       c.tableName === tableName &&
-      (c.type === 'p' || c.type === 'u') &&
-      !c.definition.toLowerCase().includes('deferrable'),
-    );
+      (c.type === "p" || c.type === "u") &&
+      !c.definition.toLowerCase().includes("deferrable"),
+    )
   }
 
   /**
@@ -101,24 +101,24 @@ export class ConstraintExtractor {
    */
   getPostTableConstraints(constraints: Constraint[]): Constraint[] {
     return constraints.filter(c =>
-      c.type === 'f' ||
-      c.type === 'c' ||
-      c.type === 'x' ||
-      c.definition.toLowerCase().includes('deferrable'),
-    );
+      c.type === "f" ||
+      c.type === "c" ||
+      c.type === "x" ||
+      c.definition.toLowerCase().includes("deferrable"),
+    )
   }
 
   private quoteIdentifier(identifier: string): string {
     // Quote identifier if it contains uppercase, spaces, or is a reserved word
     if (/[A-Z\s]/.test(identifier) || this.isReservedWord(identifier)) {
-      return `"${identifier.replace(/"/g, '""')}"`;
+      return `"${identifier.replace(/"/g, '""')}"`
     }
-    return identifier;
+    return identifier
   }
 
   private isReservedWord(word: string): boolean {
     // Simplified list of PostgreSQL reserved words
-    const reserved = ['table', 'select', 'insert', 'update', 'delete', 'from', 'where', 'group', 'order', 'by', 'constraint'];
-    return reserved.includes(word.toLowerCase());
+    const reserved = ["table", "select", "insert", "update", "delete", "from", "where", "group", "order", "by", "constraint"]
+    return reserved.includes(word.toLowerCase())
   }
 }
