@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.6.1](https://github.com/berenddeboer/dsql_dump/compare/v1.6.0...v1.6.1) (2025-09-25)
+
+
+### Bug Fixes
+
+* remove settings dsql does not support from output ([#4](https://github.com/berenddeboer/dsql_dump/issues/4)) ([a468871](https://github.com/berenddeboer/dsql_dump/commit/a468871dcbf0f4fe10b7eff8bc640351d32c553c))
+
 ## [1.6.0](https://github.com/berenddeboer/dsql_dump/compare/v1.5.1...v1.6.0) (2025-09-25)
 
 
