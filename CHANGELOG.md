@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.4.0](https://github.com/berenddeboer/dsql_dump/compare/v1.3.0...v1.4.0) (2025-09-25)
+
+
+### Features
+
+* implement dynamic version injection using build-time constants ([48910d3](https://github.com/berenddeboer/dsql_dump/commit/48910d3c52abc5a4ee1e2affe68cef1bd704797d))
+
+
+### Bug Fixes
+
+* add platform support for macOS and Windows in bin/dsql_dump.js ([8aad2ed](https://github.com/berenddeboer/dsql_dump/commit/8aad2edde51b3f6ebb8975cb100f7edb24ad9699))
+
 ## [1.3.0](https://github.com/berenddeboer/dsql_dump/compare/v1.2.5...v1.3.0) (2025-09-25)
 
 
