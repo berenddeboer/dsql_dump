@@ -3,4 +3,4 @@
 export PGUSER=admin
 export PGDATABASE=postgres
 export PGPASSWORD=$(aws dsql generate-db-connect-admin-auth-token --hostname $PGHOST --region ${AWS_REGION:-us-west-2})
-psql "$*"
+psql "$@"
