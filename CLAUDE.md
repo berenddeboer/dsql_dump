@@ -23,6 +23,7 @@ This project uses a sophisticated distribution pattern:
 - `npm run build:linux-x64` - Build only x64 binary
 - `npm run build:linux-arm64` - Build only ARM64 binary
 - `npm run eslint` - Lint TypeScript code
+- `bun run eslint --fix src/**/*.ts` - Lint and auto-fix TypeScript code in src directory
 - `npm run release` - Version bump, changelog, git tag, and build (uses commit-and-tag-version)
 - `npm run publish-all` - Publish all packages to npm (calls `scripts/publish.sh`)
 
@@ -46,6 +47,7 @@ The project uses `commit-and-tag-version` for automated releases:
 - `schema/tables.ts` - Table definition extraction
 - `schema/constraints.ts` - Foreign keys, checks, unique constraints
 - `schema/indexes.ts` - Index definitions
+- `schema/data.ts` - Table data extraction using COPY format
 
 **CLI Features**:
 - Options: `--data-only`, `--clean`, `--schema=<name>`, `--host`
@@ -58,6 +60,8 @@ The project uses `commit-and-tag-version` for automated releases:
 - Connects via `postgres` driver with DSQL-specific authentication
 - Fixed values: `database=postgres`, `username=admin`, `port=5432`
 - Schema introspection extracts tables, constraints, indexes as standard SQL DDL
+- Use the `bin/dsql-psql` utility to interact with a known DSQL cluster.
+- This supports things like: `./bin/dsql-psql -c 'select 1'`
 
 ## Build System
 

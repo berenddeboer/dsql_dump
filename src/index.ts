@@ -4,6 +4,7 @@ import { parseArgs } from 'node:util';
 import { createConnection, type DatabaseConfig } from './db';
 import { OutputFormatter } from './formatter';
 import { ConstraintExtractor } from './schema/constraints';
+import { DataExtractor } from './schema/data';
 import { IndexExtractor } from './schema/indexes';
 import { TableExtractor } from './schema/tables';
 
@@ -70,14 +71,18 @@ async function main() {
     // Output header
     console.log(formatter.formatHeader(dumpOptions));
 
+    const tableExtractor = new TableExtractor(sql);
+    const dataExtractor = new DataExtractor(sql);
+
+    // Extract tables (needed for both schema and data-only dumps)
+    const tables = await tableExtractor.extractTables(dumpOptions.schema);
+
     if (!dumpOptions.dataOnly) {
-      const tableExtractor = new TableExtractor(sql);
       const indexExtractor = new IndexExtractor(sql);
       const constraintExtractor = new ConstraintExtractor(sql);
 
-      // Extract all schema objects
-      const [tables, indexes, constraints] = await Promise.all([
-        tableExtractor.extractTables(dumpOptions.schema),
+      // Extract remaining schema objects
+      const [indexes, constraints] = await Promise.all([
         indexExtractor.extractIndexes(dumpOptions.schema),
         constraintExtractor.extractConstraints(dumpOptions.schema),
       ]);
@@ -87,6 +92,14 @@ async function main() {
         console.log(formatter.formatSectionComment('Tables'));
         for (const table of tables) {
           console.log(tableExtractor.formatCreateTable(table, constraints, dumpOptions.clean));
+        }
+      }
+
+      // Output table data after tables are created
+      if (tables.length > 0) {
+        console.log(formatter.formatSectionComment('Data'));
+        for (const table of tables) {
+          console.log(await dataExtractor.dumpTableData(table));
         }
       }
 
@@ -108,6 +121,14 @@ async function main() {
           if (indexDdl.trim()) {
             console.log(indexDdl);
           }
+        }
+      }
+    } else {
+      // Data-only dump
+      if (tables.length > 0) {
+        console.log(formatter.formatSectionComment('Data'));
+        for (const table of tables) {
+          console.log(await dataExtractor.dumpTableData(table));
         }
       }
     }
