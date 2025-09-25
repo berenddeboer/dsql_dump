@@ -1,6 +1,6 @@
 {
   "name": "dsql_dump",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "CLI utility for dumping DSQL schemas as SQL, similar to pg_dump",
   "bin": {
     "dsql_dump": "bin/dsql_dump.js"
@@ -29,11 +29,11 @@
     "publish-all": "./scripts/publish.sh"
   },
   "optionalDependencies": {
-    "dsql_dump-linux-x64-gnu": "1.5.0",
-    "dsql_dump-linux-arm64-gnu": "1.5.0",
-    "dsql_dump-darwin-arm64": "1.5.0",
-    "dsql_dump-darwin-x64": "1.5.0",
-    "dsql_dump-windows-x64": "1.5.0"
+    "dsql_dump-linux-x64-gnu": "1.5.1",
+    "dsql_dump-linux-arm64-gnu": "1.5.1",
+    "dsql_dump-darwin-arm64": "1.5.1",
+    "dsql_dump-darwin-x64": "1.5.1",
+    "dsql_dump-windows-x64": "1.5.1"
   },
   "devDependencies": {
     "@aws-sdk/dsql-signer": "^3.896.0",
