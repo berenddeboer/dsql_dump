@@ -68,6 +68,8 @@ The project uses `commit-and-tag-version` for automated releases:
 
 ## Build System
 
+**Important**: When adding new platforms, update `bin/dsql_dump.js` with the new platform mappings in the `platformPackages` object.
+
 Cross-platform binary compilation using Bun:
 - `bun build src/index.ts --compile --target=bun-linux-x64 --outfile packages/dsql_dump-linux-x64-gnu/bin/dsql_dump`
 - `bun build src/index.ts --compile --target=bun-linux-arm64 --outfile packages/dsql_dump-linux-arm64-gnu/bin/dsql_dump`

@@ -79,4 +79,4 @@ echo "Publishing dsql_dump@$VERSION"
 npm publish $PUBLISH_FLAGS
 
 echo "All packages published successfully!"
-echo "Users can now install with: npm install dsql_dump"
+echo "Users can now install with: npm install -g dsql_dump"

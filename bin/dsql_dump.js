@@ -8,7 +8,10 @@ function getBinaryPath() {
   // Map of platform/arch to package names
   const platformPackages = {
     'linux-x64': 'dsql_dump-linux-x64-gnu',
-    'linux-arm64': 'dsql_dump-linux-arm64-gnu'
+    'linux-arm64': 'dsql_dump-linux-arm64-gnu',
+    'darwin-arm64': 'dsql_dump-darwin-arm64',
+    'darwin-x64': 'dsql_dump-darwin-x64',
+    'win32-x64': 'dsql_dump-windows-x64'
   };
 
   const platform = process.platform;
@@ -24,7 +27,8 @@ function getBinaryPath() {
   try {
     // Try to resolve the platform-specific package
     const packagePath = require.resolve(`${packageName}/package.json`);
-    const binaryPath = join(packagePath, '../bin/dsql_dump');
+    const binaryName = platform === 'win32' ? 'dsql_dump.exe' : 'dsql_dump';
+    const binaryPath = join(packagePath, '../bin', binaryName);
 
     if (existsSync(binaryPath)) {
       return binaryPath;
