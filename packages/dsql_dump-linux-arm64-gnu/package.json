@@ -1,6 +1,6 @@
 {
   "name": "dsql_dump-linux-arm64-gnu",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "dsql_dump binary for Linux arm64 (glibc)",
   "os": [
     "linux"

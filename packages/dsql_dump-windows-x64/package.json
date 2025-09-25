@@ -1,6 +1,6 @@
 {
   "name": "dsql_dump-windows-x64",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "dsql_dump binary for Windows x64",
   "os": [
     "win32"

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.6.0](https://github.com/berenddeboer/dsql_dump/compare/v1.5.1...v1.6.0) (2025-09-25)
+
+
+### Features
+
+* add --schema-only option ([#3](https://github.com/berenddeboer/dsql_dump/issues/3)) ([aa88903](https://github.com/berenddeboer/dsql_dump/commit/aa889031f880fef0f484478f40d74bda137af91f))
+
 ## [1.5.1](https://github.com/berenddeboer/dsql_dump/compare/v1.5.0...v1.5.1) (2025-09-25)
 
 ## [1.5.0](https://github.com/berenddeboer/dsql_dump/compare/v1.4.0...v1.5.0) (2025-09-25)
