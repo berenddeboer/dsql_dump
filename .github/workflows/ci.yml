@@ -32,10 +32,10 @@ jobs:
         run: bun install
 
       - name: Lint
-        run: npm run eslint
+        run: bun run lint
 
       - name: Type check
-        run: bunx tsc --noEmit
+        run: bun run typecheck
 
   release:
     name: Release and Publish
