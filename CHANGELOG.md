@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.5.0](https://github.com/berenddeboer/dsql_dump/compare/v1.4.0...v1.5.0) (2025-09-25)
+
+
+### Features
+
+* extract AWS region from hostname ([78b1bc2](https://github.com/berenddeboer/dsql_dump/commit/78b1bc27953eccd6968cee4cd3ab8c830b1b6aa9))
+
+
+### Bug Fixes
+
+* remove deprecated registry-url from CI workflow ([f95b549](https://github.com/berenddeboer/dsql_dump/commit/f95b549ea5d8826f8ab40f6841565650023f09af))
+* upgrade GitHub Release action to eliminate set-output warnings ([de659b1](https://github.com/berenddeboer/dsql_dump/commit/de659b19ae8623219893a883cb0867ae6398c3eb))
+
+
+### Code Refactoring
+
+* use double quotes for strings and remove semicolons ([280c78e](https://github.com/berenddeboer/dsql_dump/commit/280c78ebaf219cd6bb01180707dfaf9b33816535))
+
 ## [1.4.0](https://github.com/berenddeboer/dsql_dump/compare/v1.3.0...v1.4.0) (2025-09-25)
 
 
