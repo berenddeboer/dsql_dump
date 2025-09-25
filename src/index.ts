@@ -1,31 +1,31 @@
 #!/usr/bin/env bun
 
 // Build-time constant injected during compilation
-declare const BUILD_VERSION: string;
+declare const BUILD_VERSION: string
 
 // Function to get version (fallback to package.json in dev mode)
 function getVersion(): string {
   try {
     // In compiled binaries, BUILD_VERSION will be defined
-    return BUILD_VERSION;
+    return BUILD_VERSION
   } catch {
     // In development, read from package.json and add -dev suffix
     try {
-      return `${packageJson.version}-dev`;
+      return `${packageJson.version}-dev`
     } catch {
-      return '0.0.0-dev';
+      return "0.0.0-dev"
     }
   }
 }
 
-import { parseArgs } from 'node:util';
-import packageJson from '../package.json' with { type: 'json' };
-import { createConnection, type DatabaseConfig } from './db';
-import { OutputFormatter } from './formatter';
-import { ConstraintExtractor } from './schema/constraints';
-import { DataExtractor } from './schema/data';
-import { IndexExtractor } from './schema/indexes';
-import { TableExtractor } from './schema/tables';
+import { parseArgs } from "node:util"
+import packageJson from "../package.json" with { type: "json" }
+import { createConnection, type DatabaseConfig } from "./db"
+import { OutputFormatter } from "./formatter"
+import { ConstraintExtractor } from "./schema/constraints"
+import { DataExtractor } from "./schema/data"
+import { IndexExtractor } from "./schema/indexes"
+import { TableExtractor } from "./schema/tables"
 
 const HELP_TEXT = `Usage: dsql_dump [OPTIONS]
 
@@ -46,124 +46,124 @@ Environment variables:
   PGHOST                           DSQL cluster hostname
   AWS_REGION                       AWS region (default: us-east-1)
 
-Requires AWS credentials configured via AWS CLI, environment variables, or IAM role.`;
+Requires AWS credentials configured via AWS CLI, environment variables, or IAM role.`
 
 async function main() {
   const { values: options } = parseArgs({
     args: Bun.argv.slice(2),
     options: {
-      'help': { type: 'boolean' },
-      'version': { type: 'boolean' },
-      'host': { type: 'string', short: 'h' },
-      'schema': { type: 'string', short: 'n' },
-      'data-only': { type: 'boolean', short: 'a' },
-      'clean': { type: 'boolean', short: 'c' },
+      "help": { type: "boolean" },
+      "version": { type: "boolean" },
+      "host": { type: "string", short: "h" },
+      "schema": { type: "string", short: "n" },
+      "data-only": { type: "boolean", short: "a" },
+      "clean": { type: "boolean", short: "c" },
     },
     allowPositionals: false,
-  });
+  })
 
   if (options.help) {
-    console.log(HELP_TEXT);
-    process.exit(0);
+    console.log(HELP_TEXT)
+    process.exit(0)
   }
 
   if (options.version) {
-    console.log(getVersion());
-    process.exit(0);
+    console.log(getVersion())
+    process.exit(0)
   }
 
 
   const config: DatabaseConfig = {
     host: options.host,
-  };
+  }
 
-  const sql = await createConnection(config);
+  const sql = await createConnection(config)
 
   try {
-    const formatter = new OutputFormatter();
+    const formatter = new OutputFormatter()
     const dumpOptions = {
-      schema: options.schema || 'public',
+      schema: options.schema || "public",
       clean: options.clean || false,
-      dataOnly: options['data-only'] || false,
-    };
+      dataOnly: options["data-only"] || false,
+    }
 
     // Output header
-    console.log(formatter.formatHeader(dumpOptions));
+    console.log(formatter.formatHeader(dumpOptions))
 
-    const tableExtractor = new TableExtractor(sql);
-    const dataExtractor = new DataExtractor(sql);
+    const tableExtractor = new TableExtractor(sql)
+    const dataExtractor = new DataExtractor(sql)
 
     // Extract tables (needed for both schema and data-only dumps)
-    const tables = await tableExtractor.extractTables(dumpOptions.schema);
+    const tables = await tableExtractor.extractTables(dumpOptions.schema)
 
     if (!dumpOptions.dataOnly) {
-      const indexExtractor = new IndexExtractor(sql);
-      const constraintExtractor = new ConstraintExtractor(sql);
+      const indexExtractor = new IndexExtractor(sql)
+      const constraintExtractor = new ConstraintExtractor(sql)
 
       // Extract remaining schema objects
       const [indexes, constraints] = await Promise.all([
         indexExtractor.extractIndexes(dumpOptions.schema),
         constraintExtractor.extractConstraints(dumpOptions.schema),
-      ]);
+      ])
 
       // Output tables
       if (tables.length > 0) {
-        console.log(formatter.formatSectionComment('Tables'));
+        console.log(formatter.formatSectionComment("Tables"))
         for (const table of tables) {
-          console.log(tableExtractor.formatCreateTable(table, constraints, dumpOptions.clean));
+          console.log(tableExtractor.formatCreateTable(table, constraints, dumpOptions.clean))
         }
       }
 
       // Output table data after tables are created
       if (tables.length > 0) {
-        console.log(formatter.formatSectionComment('Data'));
+        console.log(formatter.formatSectionComment("Data"))
         for (const table of tables) {
-          console.log(await dataExtractor.dumpTableData(table));
+          console.log(await dataExtractor.dumpTableData(table))
         }
       }
 
       // Output constraints that need to be added after tables
-      const postTableConstraints = constraintExtractor.getPostTableConstraints(constraints);
+      const postTableConstraints = constraintExtractor.getPostTableConstraints(constraints)
       if (postTableConstraints.length > 0) {
-        console.log(formatter.formatSectionComment('Constraints'));
+        console.log(formatter.formatSectionComment("Constraints"))
         for (const constraint of postTableConstraints) {
-          console.log(constraintExtractor.formatConstraint(constraint, dumpOptions.clean));
+          console.log(constraintExtractor.formatConstraint(constraint, dumpOptions.clean))
         }
       }
 
       // Output indexes (excluding those that back constraints)
-      const standaloneIndexes = indexes.filter(idx => !idx.isConstraintIndex);
+      const standaloneIndexes = indexes.filter(idx => !idx.isConstraintIndex)
       if (standaloneIndexes.length > 0) {
-        console.log(formatter.formatSectionComment('Indexes'));
+        console.log(formatter.formatSectionComment("Indexes"))
         for (const index of standaloneIndexes) {
-          const indexDdl = indexExtractor.formatCreateIndex(index, dumpOptions.clean);
+          const indexDdl = indexExtractor.formatCreateIndex(index, dumpOptions.clean)
           if (indexDdl.trim()) {
-            console.log(indexDdl);
+            console.log(indexDdl)
           }
         }
       }
     } else {
       // Data-only dump
       if (tables.length > 0) {
-        console.log(formatter.formatSectionComment('Data'));
+        console.log(formatter.formatSectionComment("Data"))
         for (const table of tables) {
-          console.log(await dataExtractor.dumpTableData(table));
+          console.log(await dataExtractor.dumpTableData(table))
         }
       }
     }
 
     // Output footer
-    console.log(formatter.formatFooter());
+    console.log(formatter.formatFooter())
 
   } catch (error) {
-    console.error('Error:', error);
-    process.exit(1);
+    console.error("Error:", error)
+    process.exit(1)
   } finally {
-    await sql.end();
+    await sql.end()
   }
 }
 
 // Run main function if this file is executed directly
 if (require.main === module) {
-  main().catch(console.error);
+  main().catch(console.error)
 }

@@ -1,5 +1,5 @@
-import type { Sql } from '../db';
-import type { Constraint } from './constraints';
+import type { Sql } from "../db"
+import type { Constraint } from "./constraints"
 
 export interface Column {
   name: string;
@@ -42,12 +42,12 @@ export class TableExtractor {
         AND a.attnum > 0
         AND NOT a.attisdropped
       ORDER BY c.relname, a.attnum
-    `;
+    `
 
-    const tableMap = new Map<string, Table>();
+    const tableMap = new Map<string, Table>()
 
     for (const row of rows) {
-      const tableName = row.table_name as string;
+      const tableName = row.table_name as string
 
       if (!tableMap.has(tableName)) {
         tableMap.set(tableName, {
@@ -56,106 +56,106 @@ export class TableExtractor {
           owner: row.owner as string,
           comment: row.table_comment as string | undefined,
           columns: [],
-        });
+        })
       }
 
-      const table = tableMap.get(tableName)!;
+      const table = tableMap.get(tableName)!
       table.columns.push({
         name: row.column_name as string,
         dataType: row.data_type as string,
         notNull: row.not_null as boolean,
         defaultValue: row.default_value as string | undefined,
         comment: row.column_comment as string | undefined,
-      });
+      })
     }
 
-    return Array.from(tableMap.values());
+    return Array.from(tableMap.values())
   }
 
   formatCreateTable(table: Table, constraints: Constraint[] = [], clean: boolean = false): string {
-    const lines: string[] = [];
+    const lines: string[] = []
 
     // Add pg_dump style comment
-    lines.push('--');
-    lines.push(`-- Name: ${table.name}; Type: TABLE; Schema: ${table.schema}; Owner: ${table.owner}`);
-    lines.push('--');
-    lines.push('');
+    lines.push("--")
+    lines.push(`-- Name: ${table.name}; Type: TABLE; Schema: ${table.schema}; Owner: ${table.owner}`)
+    lines.push("--")
+    lines.push("")
 
     // Add DROP statement if clean option is enabled
     if (clean) {
-      lines.push(`DROP TABLE IF EXISTS ${this.quoteIdentifier(table.schema)}.${this.quoteIdentifier(table.name)};`);
-      lines.push('');
+      lines.push(`DROP TABLE IF EXISTS ${this.quoteIdentifier(table.schema)}.${this.quoteIdentifier(table.name)};`)
+      lines.push("")
     }
 
     // Create table statement
-    lines.push(`CREATE TABLE ${this.quoteIdentifier(table.schema)}.${this.quoteIdentifier(table.name)} (`);
+    lines.push(`CREATE TABLE ${this.quoteIdentifier(table.schema)}.${this.quoteIdentifier(table.name)} (`)
 
     const columnDefinitions = table.columns.map(col => {
-      let def = `    ${this.quoteIdentifier(col.name)} ${col.dataType}`;
+      let def = `    ${this.quoteIdentifier(col.name)} ${col.dataType}`
 
       if (col.defaultValue) {
-        def += ` DEFAULT ${col.defaultValue}`;
+        def += ` DEFAULT ${col.defaultValue}`
       }
 
       if (col.notNull) {
-        def += ' NOT NULL';
+        def += " NOT NULL"
       }
 
-      return def;
-    });
+      return def
+    })
 
     // Filter for inline constraints (primary keys and non-deferred unique constraints)
     const inlineConstraints = constraints.filter(c =>
       c.tableName === table.name &&
-      (c.type === 'p' || c.type === 'u') &&
-      !c.definition.toLowerCase().includes('deferrable'),
-    );
+      (c.type === "p" || c.type === "u") &&
+      !c.definition.toLowerCase().includes("deferrable"),
+    )
 
     // Add constraints if any exist
     if (inlineConstraints.length > 0) {
       const constraintDefinitions = inlineConstraints.map(constraint =>
         `    CONSTRAINT ${this.quoteIdentifier(constraint.name)} ${constraint.definition}`,
-      );
-      lines.push(columnDefinitions.join(',\n') + ',');
-      lines.push(constraintDefinitions.join(',\n'));
+      )
+      lines.push(columnDefinitions.join(",\n") + ",")
+      lines.push(constraintDefinitions.join(",\n"))
     } else {
-      lines.push(columnDefinitions.join(',\n'));
+      lines.push(columnDefinitions.join(",\n"))
     }
 
-    lines.push(');');
+    lines.push(");")
 
     // Add table comment if present
     if (table.comment) {
-      lines.push('');
-      lines.push(`COMMENT ON TABLE ${this.quoteIdentifier(table.schema)}.${this.quoteIdentifier(table.name)} IS ${this.quoteLiteral(table.comment)};`);
+      lines.push("")
+      lines.push(`COMMENT ON TABLE ${this.quoteIdentifier(table.schema)}.${this.quoteIdentifier(table.name)} IS ${this.quoteLiteral(table.comment)};`)
     }
 
     // Add column comments if present
     for (const col of table.columns) {
       if (col.comment) {
-        lines.push(`COMMENT ON COLUMN ${this.quoteIdentifier(table.schema)}.${this.quoteIdentifier(table.name)}.${this.quoteIdentifier(col.name)} IS ${this.quoteLiteral(col.comment)};`);
+        lines.push(`COMMENT ON COLUMN ${this.quoteIdentifier(table.schema)}.${this.quoteIdentifier(table.name)}.${this.quoteIdentifier(col.name)} IS ${this.quoteLiteral(col.comment)};`)
       }
     }
 
-    lines.push('');
-    return lines.join('\n');
+    lines.push("")
+    return lines.join("\n")
   }
 
   private quoteIdentifier(identifier: string): string {
     // Quote identifier if it contains uppercase, spaces, or is a reserved word
     if (/[A-Z\s]/.test(identifier) || this.isReservedWord(identifier)) {
-      return `"${identifier.replace(/"/g, '""')}"`;
+      return `"${identifier.replace(/"/g, '""')}"`
     }
-    return identifier;
+    return identifier
   }
 
   private quoteLiteral(value: string): string {
-    return `'${value.replace(/'/g, "''")}'`;
+    return `'${value.replace(/'/g, "''")}'`
   }
 
   private isReservedWord(word: string): boolean {
     // Simplified list of PostgreSQL reserved words - could be expanded
-    const reserved = ['table', 'select', 'insert', 'update', 'delete', 'from', 'where', 'group', 'order', 'by'];
-    return reserved.includes(word.toLowerCase());
+    const reserved = ["table", "select", "insert", "update", "delete", "from", "where", "group", "order", "by"]
+    return reserved.includes(word.toLowerCase())
   }
 }

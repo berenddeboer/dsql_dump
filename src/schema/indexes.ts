@@ -1,4 +1,4 @@
-import type { Sql } from '../db';
+import type { Sql } from "../db"
 
 export interface Index {
   name: string;
@@ -38,7 +38,7 @@ export class IndexExtractor {
         AND n.nspname = ${schemaName}
         AND t.relkind = 'r'
       ORDER BY t.relname, i.relname
-    `;
+    `
 
     return rows.map(row => ({
       name: row.index_name as string,
@@ -49,47 +49,47 @@ export class IndexExtractor {
       isUnique: row.is_unique as boolean,
       isPrimaryKey: row.is_primary as boolean,
       isConstraintIndex: row.is_constraint_index as boolean,
-    }));
+    }))
   }
 
   formatCreateIndex(index: Index, clean: boolean = false): string {
-    const lines: string[] = [];
+    const lines: string[] = []
 
     // Skip indexes that back constraints - they will be created by the constraints
     if (index.isConstraintIndex) {
-      return '';
+      return ""
     }
 
     // Add pg_dump style comment
-    lines.push('--');
-    lines.push(`-- Name: ${index.name}; Type: INDEX; Schema: ${index.schema}; Owner: ${index.owner}`);
-    lines.push('--');
-    lines.push('');
+    lines.push("--")
+    lines.push(`-- Name: ${index.name}; Type: INDEX; Schema: ${index.schema}; Owner: ${index.owner}`)
+    lines.push("--")
+    lines.push("")
 
     // Add DROP statement if clean option is enabled
     if (clean) {
-      lines.push(`DROP INDEX IF EXISTS ${this.quoteIdentifier(index.schema)}.${this.quoteIdentifier(index.name)};`);
-      lines.push('');
+      lines.push(`DROP INDEX IF EXISTS ${this.quoteIdentifier(index.schema)}.${this.quoteIdentifier(index.name)};`)
+      lines.push("")
     }
 
     // Use the definition returned by pg_get_indexdef
-    lines.push(`${index.definition};`);
-    lines.push('');
+    lines.push(`${index.definition};`)
+    lines.push("")
 
-    return lines.join('\n');
+    return lines.join("\n")
   }
 
   private quoteIdentifier(identifier: string): string {
     // Quote identifier if it contains uppercase, spaces, or is a reserved word
     if (/[A-Z\s]/.test(identifier) || this.isReservedWord(identifier)) {
-      return `"${identifier.replace(/"/g, '""')}"`;
+      return `"${identifier.replace(/"/g, '""')}"`
     }
-    return identifier;
+    return identifier
   }
 
   private isReservedWord(word: string): boolean {
     // Simplified list of PostgreSQL reserved words
-    const reserved = ['table', 'select', 'insert', 'update', 'delete', 'from', 'where', 'group', 'order', 'by', 'index'];
-    return reserved.includes(word.toLowerCase());
+    const reserved = ["table", "select", "insert", "update", "delete", "from", "where", "group", "order", "by", "index"]
+    return reserved.includes(word.toLowerCase())
   }
 }
