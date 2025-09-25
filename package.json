@@ -21,12 +21,20 @@
     "build": "./scripts/build.sh",
     "build:linux-x64": "bun build src/index.ts --compile --target=bun-linux-x64 --outfile packages/dsql_dump-linux-x64-gnu/bin/dsql_dump",
     "build:linux-arm64": "bun build src/index.ts --compile --target=bun-linux-arm64 --outfile packages/dsql_dump-linux-arm64-gnu/bin/dsql_dump",
+    "build:darwin-arm64": "bun build src/index.ts --compile --target=bun-darwin-arm64 --outfile packages/dsql_dump-darwin-arm64/bin/dsql_dump",
+    "build:darwin-x64": "bun build src/index.ts --compile --target=bun-darwin-x64 --outfile packages/dsql_dump-darwin-x64/bin/dsql_dump",
+    "build:win32-x64": "bun build src/index.ts --compile --target=bun-windows-x64 --outfile packages/dsql_dump-win32-x64/bin/dsql_dump.exe",
+    "build:win32-arm64": "bun build src/index.ts --compile --target=bun-windows-arm64 --outfile packages/dsql_dump-win32-arm64/bin/dsql_dump.exe",
     "release": "commit-and-tag-version",
     "publish-all": "./scripts/publish.sh"
   },
   "optionalDependencies": {
     "dsql_dump-linux-x64-gnu": "1.2.5",
-    "dsql_dump-linux-arm64-gnu": "1.2.5"
+    "dsql_dump-linux-arm64-gnu": "1.2.5",
+    "dsql_dump-darwin-arm64": "1.2.5",
+    "dsql_dump-darwin-x64": "1.2.5",
+    "dsql_dump-win32-x64": "1.2.5",
+    "dsql_dump-win32-arm64": "1.2.5"
   },
   "devDependencies": {
     "@aws-sdk/dsql-signer": "^3.896.0",

@@ -28,10 +28,14 @@
   "bumpFiles": [
     "package.json",
     "packages/dsql_dump-linux-x64-gnu/package.json",
-    "packages/dsql_dump-linux-arm64-gnu/package.json"
+    "packages/dsql_dump-linux-arm64-gnu/package.json",
+    "packages/dsql_dump-darwin-arm64/package.json",
+    "packages/dsql_dump-darwin-x64/package.json",
+    "packages/dsql_dump-win32-x64/package.json",
+    "packages/dsql_dump-win32-arm64/package.json"
   ],
   "scripts": {
     "prerelease": "npm run build",
-    "postbump": "node -e \"const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')); pkg.optionalDependencies['dsql_dump-linux-x64-gnu'] = pkg.version; pkg.optionalDependencies['dsql_dump-linux-arm64-gnu'] = pkg.version; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\\n');\""
+    "postbump": "node -e \"const fs = require('fs'); const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')); pkg.optionalDependencies['dsql_dump-linux-x64-gnu'] = pkg.version; pkg.optionalDependencies['dsql_dump-linux-arm64-gnu'] = pkg.version; pkg.optionalDependencies['dsql_dump-darwin-arm64'] = pkg.version; pkg.optionalDependencies['dsql_dump-darwin-x64'] = pkg.version; pkg.optionalDependencies['dsql_dump-win32-x64'] = pkg.version; pkg.optionalDependencies['dsql_dump-win32-arm64'] = pkg.version; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\\n');\""
   }
 }

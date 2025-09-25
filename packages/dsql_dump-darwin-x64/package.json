@@ -1,0 +1,27 @@
+{
+  "name": "dsql_dump-darwin-x64",
+  "version": "1.2.5",
+  "description": "dsql_dump binary for macOS x64",
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "bin": {
+    "dsql_dump": "bin/dsql_dump"
+  },
+  "files": [
+    "bin/dsql_dump",
+    "LICENSE",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/berenddeboer/dsql_dump.git"
+  },
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=18"
+  }
+}
