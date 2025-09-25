@@ -12,10 +12,19 @@ export async function createConnection(config: DatabaseConfig) {
   const database = 'postgres';
   const username = 'admin';
 
+  // Extract region from hostname if possible, otherwise use env var or default
+  function extractRegionFromHost(hostname: string): string {
+    const match = hostname.match(/\.dsql\.([^.]+)\.on\.aws$/);
+    if (match && match[1]) {
+      return match[1];
+    }
+    return process.env.AWS_REGION ?? 'us-east-1';
+  }
+
   // Generate DSQL auth token
   const signer = new DsqlSigner({
     hostname: host,
-    region: process.env.AWS_REGION || 'us-east-1',
+    region: extractRegionFromHost(host),
   });
 
   const password = await signer.getDbConnectAdminAuthToken();
