@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.7.0](https://github.com/berenddeboer/dsql_dump/compare/v1.6.3...v1.7.0) (2025-09-28)
+
+
+### Features
+
+* use COPY to stdout ([#7](https://github.com/berenddeboer/dsql_dump/issues/7)) ([c377a72](https://github.com/berenddeboer/dsql_dump/commit/c377a72baeb74f817f3ac039b514c23faad00a09))
+
 ## [1.6.3](https://github.com/berenddeboer/dsql_dump/compare/v1.6.2...v1.6.3) (2025-09-25)
 
 
