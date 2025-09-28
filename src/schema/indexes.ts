@@ -1,4 +1,5 @@
 import type { Sql } from "../db"
+import { quoteIdentifier } from "../utils/sql-utils"
 
 export interface Index {
   name: string;
@@ -68,29 +69,64 @@ export class IndexExtractor {
 
     // Add DROP statement if clean option is enabled
     if (clean) {
-      lines.push(`DROP INDEX IF EXISTS ${this.quoteIdentifier(index.schema)}.${this.quoteIdentifier(index.name)};`)
+      lines.push(`DROP INDEX IF EXISTS ${quoteIdentifier(index.schema)}.${quoteIdentifier(index.name)};`)
       lines.push("")
     }
 
-    // Use the definition returned by pg_get_indexdef, but remove DSQL-specific USING clause
-    const cleanDefinition = index.definition.replace(/ USING btree_index /, " ")
-    lines.push(`${cleanDefinition};`)
+    // Reformat the index definition with quoted identifiers
+    const quotedDefinition = this.reformatIndexDefinition(index.definition)
+    lines.push(`${quotedDefinition};`)
     lines.push("")
 
     return lines.join("\n")
   }
 
-  private quoteIdentifier(identifier: string): string {
-    // Quote identifier if it contains uppercase, spaces, or is a reserved word
-    if (/[A-Z\s]/.test(identifier) || this.isReservedWord(identifier)) {
-      return `"${identifier.replace(/"/g, '""')}"`
+  private reformatIndexDefinition(definition: string): string {
+    // Parse the CREATE INDEX statement and quote all identifiers
+    // Example: "CREATE INDEX index_name ON schema.table (col1, col2)"
+    // Becomes: "CREATE INDEX \"index_name\" ON \"schema\".\"table\" (\"col1\", \"col2\")"
+
+    // Remove DSQL-specific USING clause first
+    let cleanDef = definition.replace(/ USING btree_index /, " ")
+
+    // Pattern to match CREATE [UNIQUE] INDEX index_name ON schema.table (columns)
+    const createIndexPattern = /^(CREATE\s+(?:UNIQUE\s+)?INDEX\s+)(\w+)(\s+ON\s+)(\w+)\.(\w+)(\s*\([^(]+\))/i
+    const match = cleanDef.match(createIndexPattern)
+
+    if (match && match[2] && match[4] && match[5]) {
+      const createPart = match[1] || ""
+      const indexName = match[2]
+      const onPart = match[3] || ""
+      const schemaName = match[4]
+      const tableName = match[5]
+      const columnsPart = match[6] || ""
+
+      // Quote the identifiers
+      const quotedIndexName = quoteIdentifier(indexName)
+      const quotedSchemaName = quoteIdentifier(schemaName)
+      const quotedTableName = quoteIdentifier(tableName)
+
+      // Handle column names in parentheses
+      const columnsMatch = columnsPart.match(/\((.*)\)/)
+      if (columnsMatch && columnsMatch[1]) {
+        const columns = columnsMatch[1].split(",").map(col => {
+          const trimmedCol = col.trim()
+          // Don't quote if it's already an expression or function call
+          if (trimmedCol.includes("(") || trimmedCol.includes(")")) {
+            return trimmedCol
+          }
+          return quoteIdentifier(trimmedCol)
+        }).join(", ")
+
+        return `${createPart}${quotedIndexName}${onPart}${quotedSchemaName}.${quotedTableName} (${columns})`
+      }
+
+      return `${createPart}${quotedIndexName}${onPart}${quotedSchemaName}.${quotedTableName}${columnsPart}`
     }
-    return identifier
+
+    // If pattern doesn't match, return the original (shouldn't happen with standard index definitions)
+    return cleanDef
   }
 
-  private isReservedWord(word: string): boolean {
-    // Simplified list of PostgreSQL reserved words
-    const reserved = ["table", "select", "insert", "update", "delete", "from", "where", "group", "order", "by", "index"]
-    return reserved.includes(word.toLowerCase())
-  }
+
 }

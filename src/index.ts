@@ -23,8 +23,8 @@ import packageJson from "../package.json" with { type: "json" }
 import { createConnection, type DatabaseConfig } from "./db"
 import { OutputFormatter } from "./formatter"
 import { ConstraintExtractor } from "./schema/constraints"
-import { DataExtractor } from "./schema/data"
 import { IndexExtractor } from "./schema/indexes"
+import { StreamingDataExtractor } from "./schema/streaming-data"
 import { TableExtractor } from "./schema/tables"
 
 const HELP_TEXT = `Usage: dsql_dump [OPTIONS]
@@ -99,7 +99,7 @@ async function main() {
     console.log(formatter.formatHeader(dumpOptions))
 
     const tableExtractor = new TableExtractor(sql)
-    const dataExtractor = new DataExtractor(sql)
+    const streamingDataExtractor = new StreamingDataExtractor(sql)
 
     // Extract tables (needed for both schema and data-only dumps)
     const tables = await tableExtractor.extractTables(dumpOptions.schema)
@@ -127,7 +127,7 @@ async function main() {
       if (tables.length > 0) {
         console.log(formatter.formatSectionComment("Data"))
         for (const table of tables) {
-          console.log(await dataExtractor.dumpTableData(table))
+          await streamingDataExtractor.streamTableData(table, process.stdout)
         }
       }
 
@@ -156,7 +156,7 @@ async function main() {
       if (tables.length > 0) {
         console.log(formatter.formatSectionComment("Data"))
         for (const table of tables) {
-          console.log(await dataExtractor.dumpTableData(table))
+          await streamingDataExtractor.streamTableData(table, process.stdout)
         }
       }
     } else if (dumpOptions.schemaOnly) {

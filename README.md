@@ -51,3 +51,4 @@ Supported:
 - [X] CREATE INDEX
 - [ ] CREATE VIEW
 - [ ] CREATE FUNCTION
+- [ ] CREATE DOMAIN

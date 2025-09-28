@@ -1,3 +1,5 @@
+import { quoteIdentifier } from "./utils/sql-utils"
+
 export interface DumpOptions {
   schema: string;
   clean: boolean;
@@ -23,7 +25,7 @@ export class OutputFormatter {
 
     // Set search path if not using public schema
     if (options.schema !== "public") {
-      lines.push(`SET search_path = ${this.quoteIdentifier(options.schema)}, pg_catalog;`)
+      lines.push(`SET search_path = ${quoteIdentifier(options.schema)}, pg_catalog;`)
       lines.push("")
     }
 
@@ -36,7 +38,6 @@ export class OutputFormatter {
     lines.push("--")
     lines.push("-- DSQL database dump complete")
     lines.push("--")
-    lines.push("")
 
     return lines.join("\n")
   }
@@ -52,17 +53,5 @@ export class OutputFormatter {
     return lines.join("\n")
   }
 
-  private quoteIdentifier(identifier: string): string {
-    // Quote identifier if it contains uppercase, spaces, or is a reserved word
-    if (/[A-Z\s]/.test(identifier) || this.isReservedWord(identifier)) {
-      return `"${identifier.replace(/"/g, '""')}"`
-    }
-    return identifier
-  }
 
-  private isReservedWord(word: string): boolean {
-    // Simplified list of PostgreSQL reserved words
-    const reserved = ["table", "select", "insert", "update", "delete", "from", "where", "group", "order", "by"]
-    return reserved.includes(word.toLowerCase())
-  }
 }
