@@ -70,6 +70,7 @@ The project uses `commit-and-tag-version` for automated releases:
 **DSQL Integration**:
 - Uses `@aws-sdk/dsql-signer` for authentication token generation
 - Connects via `postgres` driver with DSQL-specific authentication
+- The `postgres` driver was picked because it supported the COPY steram.
 - Fixed values: `database=postgres`, `username=admin`, `port=5432`
 - Schema introspection extracts tables, constraints, indexes as standard SQL DDL
 

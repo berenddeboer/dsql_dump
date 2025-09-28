@@ -1,4 +1,5 @@
 import type { Sql } from "../db"
+import { quoteIdentifier } from "../utils/sql-utils"
 
 export interface Constraint {
   name: string;
@@ -71,13 +72,13 @@ export class ConstraintExtractor {
 
     // Add DROP statement if clean option is enabled
     if (clean) {
-      lines.push(`ALTER TABLE IF EXISTS ${this.quoteIdentifier(constraint.schema)}.${this.quoteIdentifier(constraint.tableName)} DROP CONSTRAINT IF EXISTS ${this.quoteIdentifier(constraint.name)};`)
+      lines.push(`ALTER TABLE IF EXISTS ${quoteIdentifier(constraint.schema)}.${quoteIdentifier(constraint.tableName)} DROP CONSTRAINT IF EXISTS ${quoteIdentifier(constraint.name)};`)
       lines.push("")
     }
 
     // Add the constraint
-    lines.push(`ALTER TABLE ONLY ${this.quoteIdentifier(constraint.schema)}.${this.quoteIdentifier(constraint.tableName)}`)
-    lines.push(`    ADD CONSTRAINT ${this.quoteIdentifier(constraint.name)} ${constraint.definition};`)
+    lines.push(`ALTER TABLE ONLY ${quoteIdentifier(constraint.schema)}.${quoteIdentifier(constraint.tableName)}`)
+    lines.push(`    ADD CONSTRAINT ${quoteIdentifier(constraint.name)} ${constraint.definition};`)
     lines.push("")
 
     return lines.join("\n")
@@ -108,17 +109,5 @@ export class ConstraintExtractor {
     )
   }
 
-  private quoteIdentifier(identifier: string): string {
-    // Quote identifier if it contains uppercase, spaces, or is a reserved word
-    if (/[A-Z\s]/.test(identifier) || this.isReservedWord(identifier)) {
-      return `"${identifier.replace(/"/g, '""')}"`
-    }
-    return identifier
-  }
 
-  private isReservedWord(word: string): boolean {
-    // Simplified list of PostgreSQL reserved words
-    const reserved = ["table", "select", "insert", "update", "delete", "from", "where", "group", "order", "by", "constraint"]
-    return reserved.includes(word.toLowerCase())
-  }
 }

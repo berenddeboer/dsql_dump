@@ -1,5 +1,6 @@
 import type { Sql } from "../db"
 import type { Constraint } from "./constraints"
+import { quoteIdentifier, quoteLiteral } from "../utils/sql-utils"
 
 export interface Column {
   name: string;
@@ -83,15 +84,15 @@ export class TableExtractor {
 
     // Add DROP statement if clean option is enabled
     if (clean) {
-      lines.push(`DROP TABLE IF EXISTS ${this.quoteIdentifier(table.schema)}.${this.quoteIdentifier(table.name)};`)
+      lines.push(`DROP TABLE IF EXISTS ${quoteIdentifier(table.schema)}.${quoteIdentifier(table.name)};`)
       lines.push("")
     }
 
     // Create table statement
-    lines.push(`CREATE TABLE ${this.quoteIdentifier(table.schema)}.${this.quoteIdentifier(table.name)} (`)
+    lines.push(`CREATE TABLE ${quoteIdentifier(table.schema)}.${quoteIdentifier(table.name)} (`)
 
     const columnDefinitions = table.columns.map(col => {
-      let def = `    ${this.quoteIdentifier(col.name)} ${col.dataType}`
+      let def = `    ${quoteIdentifier(col.name)} ${col.dataType}`
 
       if (col.defaultValue) {
         def += ` DEFAULT ${col.defaultValue}`
@@ -114,7 +115,7 @@ export class TableExtractor {
     // Add constraints if any exist
     if (inlineConstraints.length > 0) {
       const constraintDefinitions = inlineConstraints.map(constraint =>
-        `    CONSTRAINT ${this.quoteIdentifier(constraint.name)} ${constraint.definition}`,
+        `    CONSTRAINT ${quoteIdentifier(constraint.name)} ${constraint.definition}`,
       )
       lines.push(columnDefinitions.join(",\n") + ",")
       lines.push(constraintDefinitions.join(",\n"))
@@ -127,13 +128,13 @@ export class TableExtractor {
     // Add table comment if present
     if (table.comment) {
       lines.push("")
-      lines.push(`COMMENT ON TABLE ${this.quoteIdentifier(table.schema)}.${this.quoteIdentifier(table.name)} IS ${this.quoteLiteral(table.comment)};`)
+      lines.push(`COMMENT ON TABLE ${quoteIdentifier(table.schema)}.${quoteIdentifier(table.name)} IS ${quoteLiteral(table.comment)};`)
     }
 
     // Add column comments if present
     for (const col of table.columns) {
       if (col.comment) {
-        lines.push(`COMMENT ON COLUMN ${this.quoteIdentifier(table.schema)}.${this.quoteIdentifier(table.name)}.${this.quoteIdentifier(col.name)} IS ${this.quoteLiteral(col.comment)};`)
+        lines.push(`COMMENT ON COLUMN ${quoteIdentifier(table.schema)}.${quoteIdentifier(table.name)}.${quoteIdentifier(col.name)} IS ${quoteLiteral(col.comment)};`)
       }
     }
 
@@ -141,21 +142,5 @@ export class TableExtractor {
     return lines.join("\n")
   }
 
-  private quoteIdentifier(identifier: string): string {
-    // Quote identifier if it contains uppercase, spaces, or is a reserved word
-    if (/[A-Z\s]/.test(identifier) || this.isReservedWord(identifier)) {
-      return `"${identifier.replace(/"/g, '""')}"`
-    }
-    return identifier
-  }
 
-  private quoteLiteral(value: string): string {
-    return `'${value.replace(/'/g, "''")}'`
-  }
-
-  private isReservedWord(word: string): boolean {
-    // Simplified list of PostgreSQL reserved words - could be expanded
-    const reserved = ["table", "select", "insert", "update", "delete", "from", "where", "group", "order", "by"]
-    return reserved.includes(word.toLowerCase())
-  }
 }
