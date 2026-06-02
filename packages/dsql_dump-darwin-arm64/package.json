@@ -1,6 +1,6 @@
 {
   "name": "dsql_dump-darwin-arm64",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "description": "dsql_dump binary for macOS arm64",
   "os": [
     "darwin"
