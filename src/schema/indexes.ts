@@ -53,7 +53,7 @@ export class IndexExtractor {
     }))
   }
 
-  formatCreateIndex(index: Index, clean: boolean = false): string {
+  formatCreateIndex(index: Index, clean: boolean = false, dsqlCompatible: boolean = false): string {
     const lines: string[] = []
 
     // Skip indexes that back constraints - they will be created by the constraints
@@ -74,14 +74,14 @@ export class IndexExtractor {
     }
 
     // Reformat the index definition with quoted identifiers
-    const quotedDefinition = this.reformatIndexDefinition(index.definition)
+    const quotedDefinition = this.reformatIndexDefinition(index.definition, dsqlCompatible)
     lines.push(`${quotedDefinition};`)
     lines.push("")
 
     return lines.join("\n")
   }
 
-  private reformatIndexDefinition(definition: string): string {
+  private reformatIndexDefinition(definition: string, dsqlCompatible: boolean): string {
     // Parse the CREATE INDEX statement and quote all identifiers
     // Example: "CREATE INDEX index_name ON schema.table (col1, col2)"
     // Becomes: "CREATE INDEX \"index_name\" ON \"schema\".\"table\" (\"col1\", \"col2\")"
@@ -89,8 +89,12 @@ export class IndexExtractor {
     // Remove DSQL-specific USING clause first
     let cleanDef = definition.replace(/ USING btree_index /, " ")
 
+    if (dsqlCompatible) {
+      cleanDef = cleanDef.replace(/^(CREATE\s+(?:UNIQUE\s+)?INDEX)(\s+)/i, "$1 ASYNC$2")
+    }
+
     // Pattern to match CREATE [UNIQUE] INDEX index_name ON schema.table (columns)
-    const createIndexPattern = /^(CREATE\s+(?:UNIQUE\s+)?INDEX\s+)(\w+)(\s+ON\s+)(\w+)\.(\w+)(\s*\([^(]+\))/i
+    const createIndexPattern = /^(CREATE\s+(?:UNIQUE\s+)?INDEX\s+(?:ASYNC\s+)?)(\w+)(\s+ON\s+)(\w+)\.(\w+)(\s*\([^(]+\))/i
     const match = cleanDef.match(createIndexPattern)
 
     if (match && match[2] && match[4] && match[5]) {

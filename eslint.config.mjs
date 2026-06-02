@@ -107,7 +107,7 @@ export default [
       ],
 
       // Import rules
-      'import/no-unresolved': ['error'],
+      'import/no-unresolved': ['error', { ignore: ['^bun:test$'] }],
       'import/order': [
         'warn',
         {

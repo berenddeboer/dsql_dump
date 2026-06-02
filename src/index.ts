@@ -40,6 +40,7 @@ Options:
   -a, --data-only                  dump only the data, not the schema
   -s, --schema-only                dump only the schema, not the data
   -c, --clean                      output commands to DROP objects before creating them
+      --dsql-compatible            output DSQL-compatible SQL for restore
       --help                       display help for command
       --version                    display version number
 
@@ -60,6 +61,7 @@ async function main() {
       "data-only": { type: "boolean", short: "a" },
       "schema-only": { type: "boolean", short: "s" },
       "clean": { type: "boolean", short: "c" },
+      "dsql-compatible": { type: "boolean" },
     },
     allowPositionals: false,
   })
@@ -93,6 +95,7 @@ async function main() {
       clean: options.clean || false,
       dataOnly: options["data-only"] || false,
       schemaOnly: options["schema-only"] || false,
+      dsqlCompatible: options["dsql-compatible"] || false,
     }
 
     // Output header
@@ -145,7 +148,7 @@ async function main() {
       if (standaloneIndexes.length > 0) {
         console.log(formatter.formatSectionComment("Indexes"))
         for (const index of standaloneIndexes) {
-          const indexDdl = indexExtractor.formatCreateIndex(index, dumpOptions.clean)
+          const indexDdl = indexExtractor.formatCreateIndex(index, dumpOptions.clean, dumpOptions.dsqlCompatible)
           if (indexDdl.trim()) {
             console.log(indexDdl)
           }
@@ -192,7 +195,7 @@ async function main() {
       if (standaloneIndexes.length > 0) {
         console.log(formatter.formatSectionComment("Indexes"))
         for (const index of standaloneIndexes) {
-          const indexDdl = indexExtractor.formatCreateIndex(index, dumpOptions.clean)
+          const indexDdl = indexExtractor.formatCreateIndex(index, dumpOptions.clean, dumpOptions.dsqlCompatible)
           if (indexDdl.trim()) {
             console.log(indexDdl)
           }
