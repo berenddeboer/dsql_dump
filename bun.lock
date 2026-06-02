@@ -25,7 +25,7 @@
         "dsql_dump-windows-x64": "1.7.0",
       },
       "peerDependencies": {
-        "typescript": "6",
+        "typescript": "^6",
       },
     },
   },

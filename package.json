@@ -49,6 +49,6 @@
     "postgres": "^3.4.9"
   },
   "peerDependencies": {
-    "typescript": "6"
+    "typescript": "^6"
   }
 }
