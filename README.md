@@ -38,6 +38,7 @@ Supported options:
 | -a, --data-only           | Dump only the data, not the schema (data definitions)                                                      |
 | -s, --schema-only         | Dump only the schema (data definitions), not the data                                                       |
 | -c, --clean               | Output commands to DROP all the dumped database objects prior to outputting the commands for creating them |
+| --dsql-compatible         | Output DSQL-compatible SQL for restore, including `CREATE INDEX ASYNC`                                     |
 | --help                    | Display help for command                                                                                    |
 | --version                 | Display version number                                                                                      |
 

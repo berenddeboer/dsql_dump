@@ -4,6 +4,8 @@ export interface DumpOptions {
   schema: string;
   clean: boolean;
   dataOnly: boolean;
+  schemaOnly: boolean;
+  dsqlCompatible: boolean;
 }
 
 export class OutputFormatter {
