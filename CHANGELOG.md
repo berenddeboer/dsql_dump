@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.7.1](https://github.com/berenddeboer/dsql_dump/compare/v1.7.0...v1.7.1) (2026-06-02)
+
 ## [1.7.0](https://github.com/berenddeboer/dsql_dump/compare/v1.6.3...v1.7.0) (2025-09-28)
 
 
